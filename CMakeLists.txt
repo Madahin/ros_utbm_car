@@ -1,19 +1,62 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.0.0)
 project(ros_utbm_car)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin COMPONENTS roscpp REQUIRED)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+catkin_package(
+#  INCLUDE_DIRS include
+#  LIBRARIES ros_utbm_car
+#  CATKIN_DEPENDS other_catkin_pkg
+#  DEPENDS system_lib
+)
 
 set( CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} $ENV{QT5_DIR} )
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 set( CMAKE_AUTOMOC ON )
-find_package( Qt5Widgets REQUIRED )
+find_package( Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
+find_package(Marble REQUIRED)
 
-add_executable( ${PROJECT_NAME} src/main.cpp src/mainwindow.cpp include/mainwindow.h)
 
-target_link_libraries( ${PROJECT_NAME} Qt5::Widgets )
+find_package(ICU COMPONENTS io i18n REQUIRED)
+
+if(ICU_FOUND)
+    message("-- ICU found")
+endif(ICU_FOUND)
+#message(${MARBLE_LIBRARIES})
+include_directories(${ICU_INCLUDE_DIRS})
+find_package(Boost REQUIRED COMPONENTS regex)
+
+file(
+    GLOB_RECURSE
+    files
+    src/*.cpp
+    include/*.hpp
+)
+
+file(
+    GLOB_RECURSE
+    icu_lib_57
+    external/lib/icu.57/*.so
+)
+
+file(
+    GLOB_RECURSE
+    icu_lib_58
+    external/lib/icu.58/*.so
+)
+
+add_executable( ${PROJECT_NAME} ${files})
+
+target_link_libraries( ${PROJECT_NAME} ${ICU_LIBRARIES} Qt5::Widgets Marble
+   ${Boost_LIBRARIES}
+   ${icu_lib_57}
+   ${icu_lib_58}
+   ${catkin_LIBRARIES}
+)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -103,12 +146,6 @@ target_link_libraries( ${PROJECT_NAME} Qt5::Widgets )
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES ros_utbm_car
-#  CATKIN_DEPENDS other_catkin_pkg
-#  DEPENDS system_lib
-)
 
 ###########
 ## Build ##
