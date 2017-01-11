@@ -27,6 +27,9 @@
 #include "include/RosThread.hpp"
 #include "include/Tools.hpp"
 
+/**
+ * @brief The MainWindow class represente our interface
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -60,13 +63,41 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = 0, int argc=0, char ** argv=nullptr);
 
     private:
+        /**
+         * @brief InitDirectories make sure every directory we need exist
+         */
         void InitDirectories();
+
+        /**
+         * @brief InitGPS intialise the GPS widget
+         */
         void InitGPS();
+
+        /**
+         * @brief InitImageViewer initialise the camera widget
+         */
         void InitImageViewer();
+
+        /**
+         * @brief SaveImage save a picture in a directory
+         * @param data the picture we want to save
+         * @param filename the path in wich we save te picture
+         */
         void SaveImage(const QPixmap& data, const QString& filename) const;
 
+        /**
+         * @brief Process_nmea update our map position and save the NMEA trame
+         */
         Q_SLOT void Process_nmea(QString msg);
+
+        /**
+         * @brief Process_camera update our camera widget and save picture
+         */
         Q_SLOT void Process_camera(QPixmap frame);
+
+        /**
+         * @brief Close_camera close the image feed
+         */
         Q_SLOT void Close_camera();
 };
 

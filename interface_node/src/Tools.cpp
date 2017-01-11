@@ -21,7 +21,6 @@ std::array<long, 2> GetSplitedEpoch()
     return res;
 }
 
-#include <iostream>
 std::array<double, 2> ConvertNMEAToDegree(QString lat, QChar latDir, QString lon, QChar lonDir)
 {
     std::array<double, 2> res = {0, 0};
@@ -63,7 +62,7 @@ void AppendDirSeparator(std::string& path)
 
 void DeleteDirSeparator(std::string& path)
 {
-    if(path.at(path.length()-1) = '/'){
+    if(path.at(path.length()-1) == '/'){
         path.pop_back();
     }
 }

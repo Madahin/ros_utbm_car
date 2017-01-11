@@ -8,6 +8,7 @@ RosThread::RosThread(int argc, char ** argv) :
 
 RosThread::~RosThread()
 {
+    // Make sure ROS is destroyed
     if (ros::isStarted())
     {
         ros::shutdown();
@@ -19,16 +20,20 @@ RosThread::~RosThread()
 
 bool RosThread::Init()
 {
+    // ROS must live in his own thread
     m_thread = new QThread();
     moveToThread(m_thread);
 
     ros::init(m_argc, m_argv, "ros_utbm_car");
 
+    // Did ROS fail the init ?
     if (!ros::master::check())
         return false;
 
+    // Launch ROS only when the thread is ready
     connect(m_thread, &QThread::started, this, &RosThread::Run);
 
+    // now that ROS is initialised, we can create our node handler
     m_nodeHandler.reset(new ros::NodeHandle);
 
     ros::start();
@@ -40,8 +45,10 @@ bool RosThread::Init()
 
 void RosThread::Run()
 {
+    // We may need to change these topic in the futur
     m_nmeaListener = m_nodeHandler->subscribe("nmea_chatter", 10, &RosThread::nmeaCallback, this);
     m_cameraListener = m_nodeHandler->subscribe("/usb_cam/image_raw", 10, &RosThread::FrameCallback, this);
+    // ROS wait for message
     ros::spin();
 }
 
