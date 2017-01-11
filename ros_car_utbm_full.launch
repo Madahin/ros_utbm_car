@@ -1,0 +1,21 @@
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="framerate" value="5" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+  </node>
+  <node name="NMEA_node" pkg="NMEA_node" type="NMEA_node_node" output="screen" >
+  </node>
+  <node name="ros_utbm_car" pkg="ros_utbm_car" type="ros_utbm_car" output="screen" >
+    <param name="datafolder" value="/tmp/ros_utbm_car" />
+    <param name="gps_data_folder" value="gps/" />
+    <param name="gps_data_file" value="gps_data.csv" />
+    <param name="camera_data_folder" value="camera" />
+    <param name="camera_data_file" value="camera_data.csv" />
+    <param name="osm_data_file" value="/home/madahin/catkin_ws/src/ros_utbm_car/interface_node/mapdata/map.osm" />
+  </node>
+</launch>

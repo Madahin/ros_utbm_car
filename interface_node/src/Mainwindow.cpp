@@ -46,7 +46,7 @@ void MainWindow::InitDirectories()
     ////////////////
 
     // Retreive and sanitize the camera folder path
-    m_rosThread->GetNodeHandle().param<std::string>("/ros_utbm_car/gps_data_folder", m_cameraDataFolder, "camera/");
+    m_rosThread->GetNodeHandle().param<std::string>("/ros_utbm_car/camera_data_folder", m_cameraDataFolder, "camera/");
     AppendDirSeparator(m_cameraDataFolder);
     m_cameraDataFolder = m_dataDirectory + m_cameraDataFolder;
     // We make sur the directory exist
@@ -97,7 +97,7 @@ void MainWindow::InitGPS()
     model->clearPersistentTileCache();
     std::string dataFilePath;
     // Load OSM data
-    m_rosThread->GetNodeHandle().param<std::string>("/ros_utbm_car/osm_data_folder", dataFilePath, "mapdata/map.osm");
+    m_rosThread->GetNodeHandle().param<std::string>("/ros_utbm_car/osm_data_file", dataFilePath, "mapdata/map.osm");
     model->addGeoDataFile(QString::fromStdString(dataFilePath));
     // if we don't have internet connexion, the downloadManager broke down, so we deactivate this functionality
     model->downloadManager()->setDownloadEnabled(false);
